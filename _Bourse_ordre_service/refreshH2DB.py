@@ -7,13 +7,14 @@ import urllib
 import urllib2
 
 class Ordre(object):
-    def __init__(self,qte=None, date_ordre=None, nbre=None, price=None, type_ordre=None, code_societe=None):
+    def __init__(self,qte=None, date_ordre=None, nbre=None, price=None, type_ordre=None, code_societe=None, nom_societe=None):
         self.qte = qte
         self.date_ordre = date_ordre
         self.nbre = nbre
         self.price = price
         self.type_ordre = type_ordre
         self.code_societe = code_societe
+        self.nom_societe = nom_societe
 
 OrdresAchat = []
 OrdresVente = []
@@ -38,6 +39,7 @@ for d in data:
     date_ordre = str(date_ordre).replace(':','%3A')
     cc=0
     code_societe = (data_societe_codes[0].text).encode('utf-8').strip()
+    nom_societe = (data_societe_titles[0].h1.text).encode('utf-8').strip()
     for d in data_nbre_actions:
         nbre = (d.text).encode('utf-8').strip()
         if(nbre != "-"):
@@ -46,7 +48,7 @@ for d in data:
             price = urllib.quote(price)
             price = str(price).replace('%A0','%20')
             price = str(price).replace('%2C','%2E')
-            OrdresAchat.append(Ordre(qte,date_ordre,nbre,price,"Achat",code_societe))
+            OrdresAchat.append(Ordre(qte,date_ordre,nbre,price,"Achat",code_societe,nom_societe))
             print "Scraping ..."
         cc+=1
     data_nbre_actions_V = soup_societe_titles.find_all("td",{"class": "askNbOrders"})
@@ -61,16 +63,16 @@ for d in data:
             price_V = urllib.quote(price_V)
             price_V = str(price_V).replace('%A0','%20')
             price_V = str(price_V).replace('%2C','%2E')
-            OrdresVente.append(Ordre(qte_V,date_ordre,nbre_V,price_V,"Vente",code_societe))
+            OrdresVente.append(Ordre(qte_V,date_ordre,nbre_V,price_V,"Vente",code_societe,nom_societe))
             print "Scraping ..."
         cc+=1
 
 requests.get("http://localhost:8882/deleteAll")
 
 for oa in OrdresAchat:
-    requests.get("http://localhost:8882/save?prix_action="+oa.price+"&qte="+oa.qte+"&date_ordre="+oa.date_ordre+"&nbre_actions="+oa.nbre+"&code_societe="+oa.code_societe+"&type_ordre=Achat")
+    requests.get("http://localhost:8882/save?prix_action="+oa.price+"&qte="+oa.qte+"&date_ordre="+oa.date_ordre+"&nbre_actions="+oa.nbre+"&code_societe="+oa.code_societe+"&type_ordre=Achat&nom_societe="+oa.nom_societe)
     print "Row Inserted"
 
 for oa in OrdresVente:
-    requests.get("http://localhost:8882/save?prix_action="+oa.price+"&qte="+oa.qte+"&date_ordre="+oa.date_ordre+"&nbre_actions="+oa.nbre+"&code_societe="+oa.code_societe+"&type_ordre=Vente")
+    requests.get("http://localhost:8882/save?prix_action="+oa.price+"&qte="+oa.qte+"&date_ordre="+oa.date_ordre+"&nbre_actions="+oa.nbre+"&code_societe="+oa.code_societe+"&type_ordre=Vente&nom_societe="+oa.nom_societe)
     print "Row Inserted"

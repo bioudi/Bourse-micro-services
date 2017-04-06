@@ -20,12 +20,13 @@ public class Ordre implements Serializable {
 	private int nbre_actions;
 	private String code_societe;
 	private String type_ordre;
+	private String nom_societe;
 	
 	public Ordre() {
 		super();
 	}
 
-	public Ordre(float prix_action, int qte, String date_ordre, int nbre_actions, String code_societe, String type_ordre) {
+	public Ordre(float prix_action, int qte, String date_ordre, int nbre_actions, String code_societe, String type_ordre, String nom_societe) {
 		super();
 		this.prix_action = prix_action;
 		this.qte = qte;
@@ -33,6 +34,15 @@ public class Ordre implements Serializable {
 		this.nbre_actions = nbre_actions;
 		this.code_societe = code_societe;
 		this.type_ordre = type_ordre;
+		this.nom_societe = nom_societe;
+	}
+	
+	public String getNom_societe() {
+		return nom_societe;
+	}
+
+	public void setNom_societe(String nom_societe) {
+		this.nom_societe = nom_societe;
 	}
 	
 	public Long getId_ordre() {
