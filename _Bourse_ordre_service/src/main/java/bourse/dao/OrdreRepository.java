@@ -12,4 +12,10 @@ import bourse.entities.Ordre;
 public interface OrdreRepository extends JpaRepository<Ordre, Long> {
 	@Query("select o from Ordre o where code_societe = :code")
 	public List<Ordre> getOrdreByCodeSociete(@Param("code")String code);
+	
+	@Query("select o from Ordre o where code_societe = :code and type_ordre = 'Achat'")
+	public List<Ordre> getOrdreAchatByCodeSociete(@Param("code")String code);
+	
+	@Query("select o from Ordre o where code_societe = :code and type_ordre = 'Vente'")
+	public List<Ordre> getOrdreVenteByCodeSociete(@Param("code")String code);
 }

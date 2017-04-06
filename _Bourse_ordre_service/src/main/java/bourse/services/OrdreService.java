@@ -22,6 +22,16 @@ public class OrdreService {
 		return ordrerepository.findAll();
 	}
 	
+	@RequestMapping("/ordresAchat")
+	public List<Ordre> getOrdreAchat(String code){
+		return ordrerepository.getOrdreAchatByCodeSociete(code);
+	}
+	
+	@RequestMapping("/ordresVente")
+	public List<Ordre> getOrdreVente(String code){
+		return ordrerepository.getOrdreVenteByCodeSociete(code);
+	}
+	
 	@RequestMapping("/save")
 	public Ordre saveOrdre(Ordre o){
 		return ordrerepository.save(o);
