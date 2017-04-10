@@ -1,10 +1,7 @@
-import pprint
-from pymongo import MongoClient
 import requests
 from bs4 import BeautifulSoup
 import re
 import urllib
-import urllib2
 
 class Ordre(object):
     def __init__(self,qte=None, date_ordre=None, nbre=None, price=None, type_ordre=None, code_societe=None, nom_societe=None):
@@ -26,13 +23,13 @@ c=0
 for d in data:
     link = "https://www.wafabourse.com/"+str(d.a.get("href"))
     r1 = requests.get(link)
-    soup_societe_titles = BeautifulSoup(r1.content,'html.parser')
-    data_societe_titles = soup_societe_titles.find_all("div",{"class": "titre"})
-    data_societe_codes = soup_societe_titles.find_all("div",{"class": "markettitleisin"})
-    data_nbre_actions = soup_societe_titles.find_all("td",{"class": "bidNbOrders"})
-    data_qte_actions = soup_societe_titles.find_all("td",{"class": "bidVolume"})
-    data_prix_action = soup_societe_titles.find_all("td",{"class": "bidPrice"})
-    data_date_ordre = soup_societe_titles.findAll("td",{"class": "lastPriceDateTime"})
+    soup_societe = BeautifulSoup(r1.content,'html.parser')
+    data_societe_titles = soup_societe.find_all("div",{"class": "titre"})
+    data_societe_codes = soup_societe.find_all("div",{"class": "markettitleisin"})
+    data_nbre_actions = soup_societe.find_all("td",{"class": "bidNbOrders"})
+    data_qte_actions = soup_societe.find_all("td",{"class": "bidVolume"})
+    data_prix_action = soup_societe.find_all("td",{"class": "bidPrice"})
+    data_date_ordre = soup_societe.findAll("td",{"class": "lastPriceDateTime"})
     date_ordre = (data_date_ordre[1].text).encode('utf-8').strip()
     date_ordre = str(date_ordre).replace('/','%2F')
     date_ordre = str(date_ordre).replace(' ','%20')
@@ -51,9 +48,9 @@ for d in data:
             OrdresAchat.append(Ordre(qte,date_ordre,nbre,price,"Achat",code_societe,nom_societe))
             print "Scraping ..."
         cc+=1
-    data_nbre_actions_V = soup_societe_titles.find_all("td",{"class": "askNbOrders"})
-    data_qte_actions_V = soup_societe_titles.find_all("td",{"class": "askVolume"})
-    data_prix_action_V = soup_societe_titles.find_all("td",{"class": "askPrice"})
+    data_nbre_actions_V = soup_societe.find_all("td",{"class": "askNbOrders"})
+    data_qte_actions_V = soup_societe.find_all("td",{"class": "askVolume"})
+    data_prix_action_V = soup_societe.find_all("td",{"class": "askPrice"})
     cc = 0
     for d in data_nbre_actions_V:
         nbre_V = (d.text).encode('utf-8').strip()
